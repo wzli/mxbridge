@@ -14,7 +14,7 @@ A minimal framework in C to provide publish/subscribe facilities and message bri
 1. Create header files defining message types and bridge messages, see [bridge_def.h](./include/bridge_def.h)
 2. In any one compilation unit, call the GEN_BRIDGE_IMPLEMENTATION() macro, see [bridge_impl.c](./src/bridge_impl.c)
 3. BRIDGE_SUBSCRIBE_ENDPOINT() subscribes FrameEndpoints (to send serialized outbound message frames)
-4. message_subscribe() subscribes MessageHandlers (where to receive deserialized inbound messages)
+4. message_subscribe() subscribes MessageHandlers (to receive deserialized inbound messages)
 5. Call bridge_receive_frame() on message frame receive, to deserialize and publish message to subscribed handlers.
 6. Call message_publish(MsgType_subscribers, &msg, src_ctx) to publish message to all subscribed handlers.
 7. If a FrameEndpoint is subscribed, it will deserialize the message and trigger its defined frame_handler.
