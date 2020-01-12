@@ -1,6 +1,6 @@
 #pragma once
 
-typedef int (*MessageHandler)(const void* message, void* context);
+typedef int (*MessageHandler)(const void* message, const void* src_ctx, void* dst_ctx);
 
 typedef struct {
     MessageHandler message_handler;
@@ -11,7 +11,7 @@ typedef struct {
 
 static inline int message_subscribe(
         MessageSubscriber* subscribers, MessageHandler handler, void* context) {
-    subscribers[++(LEN(subscribers))] = (MessageSubscriber){handler, context};
+    subscribers[++LEN(subscribers)] = (MessageSubscriber){handler, context};
     return LEN(subscribers);
 }
 
@@ -26,10 +26,11 @@ static inline int message_unsubscribe(
     return -1;
 }
 
-static inline int message_publish(MessageSubscriber* subscribers, const void* message) {
+static inline int message_publish(
+        MessageSubscriber* subscribers, const void* message, const void* src_ctx) {
     int aggregate = 0;
     for (int i = 1; i <= LEN(subscribers); ++i) {
-        aggregate += subscribers[i].message_handler(message, subscribers[i].context);
+        aggregate += subscribers[i].message_handler(message, src_ctx, subscribers[i].context);
     }
     return aggregate;
 }

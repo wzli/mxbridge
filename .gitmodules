@@ -1,0 +1,3 @@
+[submodule "mxgen"]
+	path = mxgen
+	url = git@github.com:wzli/mxgen.git
