@@ -1,0 +1,2 @@
+#include "bridge_def.h"
+GEN_BRIDGE_IMPLEMENTATION(BRIDGE_MESSAGES);
