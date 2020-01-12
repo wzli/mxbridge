@@ -34,8 +34,9 @@ int bridge_receive_frame(const void* frame, int len, void* context);
     GEN_BRIDGE_RECEIVE_IMPL(BRIDGE_MESSAGES)
 
 // subscribe frame endpoint to message broadcasts
-#define BRIDGE_SUBSCRIBE_ENDPOINT(TYPE, HANDLER, CTX) \
-    message_subscribe(TYPE##_subscribers, TYPE##_bridge_send, &(FrameEndpoint){HANDLER, CTX});
+#define BRIDGE_SUBSCRIBE_ENDPOINT(TYPE, HANDLER, CTX)                          \
+    message_subscribe(TYPE##_subscribers, (MessageHandler) TYPE##_bridge_send, \
+            &(FrameEndpoint){HANDLER, CTX});
 
 // macros below are used internally
 
@@ -50,23 +51,24 @@ int bridge_receive_frame(const void* frame, int len, void* context);
 
 // generate declaration of send functions
 #define GEN_BRIDGE_SEND_DECL(TYPE, MAX_SUBS) \
-    int TYPE##_bridge_send(const void* message, const void* src_ctx, void* frame_endpoint);
+    int TYPE##_bridge_send(const TYPE* message, const void* src_ctx, FrameEndpoint* frame_endpoint);
 
 // generate definition of message subscriber queues
 #define GEN_BRIDGE_SUBSCRIBER_IMPL(TYPE, MAX_SUBS) \
     MessageSubscriber TYPE##_subscribers[(MAX_SUBS) + 1];
 
 // generate implementation of send functions
-#define GEN_BRIDGE_SEND_IMPL(TYPE, MAX_SUBS)                                                 \
-    int TYPE##_bridge_send(const void* message, const void* src_ctx, void* frame_endpoint) { \
-        FrameEndpoint* dst = frame_endpoint;                                                 \
-        if (src_ctx == dst->context) {                                                       \
-            return BRIDGE_SAME_SRC_DST;                                                      \
-        }                                                                                    \
-        uint8_t buf[sizeof(TYPE) + MESSAGE_ID_SIZE];                                         \
-        *(uint16_t*) buf = TYPE##_ID;                                                        \
-        int len = TYPE##_serialize(message, buf + MESSAGE_ID_SIZE);                          \
-        return dst->frame_handler(buf, len + MESSAGE_ID_SIZE, dst->context);                 \
+#define GEN_BRIDGE_SEND_IMPL(TYPE, MAX_SUBS)                                           \
+    int TYPE##_bridge_send(                                                            \
+            const TYPE* message, const void* src_ctx, FrameEndpoint* frame_endpoint) { \
+        FrameEndpoint* dst = frame_endpoint;                                           \
+        if (src_ctx == dst->context) {                                                 \
+            return BRIDGE_SAME_SRC_DST;                                                \
+        }                                                                              \
+        uint8_t buf[sizeof(TYPE) + MESSAGE_ID_SIZE];                                   \
+        *(uint16_t*) buf = TYPE##_ID;                                                  \
+        int len = TYPE##_serialize(message, buf + MESSAGE_ID_SIZE);                    \
+        return dst->frame_handler(buf, len + MESSAGE_ID_SIZE, dst->context);           \
     }
 
 // generate implementation of receive function
