@@ -10,7 +10,7 @@ A minimal framework in C to provide publish/subscribe facilities and message bri
 - Publish/subscribe framework allows for consolidation of various callbacks across the system.
 - Centralized and portable bridge message definitions allow generation of cross-platform communication.
 
-## Example Usage
+## Usage
 1. Create header files defining message types and bridge messages, see [bridge_def.h](./include/bridge_def.h)
 2. In any one compilation unit, call the GEN_BRIDGE_IMPLEMENTATION() macro, see [bridge_impl.c](./src/bridge_impl.c)
 3. BRIDGE_SUBSCRIBE_ENDPOINT() subscribes FrameEndpoints (to send serialized outbound message frames)
