@@ -3,18 +3,18 @@ A minimal framework in C to provide publish/subscribe facilities and message bri
 
 ## Use Case
 - Eliminate all boilerplate code required for messaging between embedded devices, takes care of:
-..- Generation of Message IDs when converting to and from byte frames.
-..- Generation of serialization/deserialization methods for each message type.
-..- Calling the correct serialization/deserialization that correspond to each message type.
-..- Calling the correct MessageHandlers when a certain message type is received.
+    - Generation of Message IDs when converting to and from byte frames.
+    - Generation of serialization/deserialization methods for each message type.
+    - Calling the correct serialization/deserialization that correspond to each message type.
+    - Calling the correct MessageHandlers when a certain message type is received.
 - Publish/subscribe framework allows for consolidation of various callbacks across the system.
-- Centralized and portable bridge message definitions allow generation of cross-platform bridging.
+- Centralized and portable bridge message definitions allow generation of cross-platform communication.
 
 ## Example Usage
 1. Create header files defining message types and bridge messages, see [bridge_def.h](./include/bridge_def.h)
 2. In any one compilation unit, call the GEN_BRIDGE_IMPLEMENTATION() macro, see [bridge_impl.c](./src/bridge_impl.c)
-3. Use BRIDGE_SUBSCRIBE_ENDPOINT() to subscribe FrameEndpoints (to send serialized outbound message frames)
-4. Use message_subscribe() to subscribe MessageHandlers (where to receive deserialized inbound messages)
+3. BRIDGE_SUBSCRIBE_ENDPOINT() subscribes FrameEndpoints (to send serialized outbound message frames)
+4. message_subscribe() subscribes MessageHandlers (where to receive deserialized inbound messages)
 5. Call bridge_receive_frame() on message frame receive, to deserialize and publish message to subscribed handlers.
 6. Call message_publish(MsgType_subscribers, &msg, src_ctx) to publish message to all subscribed handlers.
 7. If a FrameEndpoint is subscribed, it will deserialize the message and trigger its defined frame_handler.
