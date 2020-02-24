@@ -23,6 +23,8 @@ A minimal framework in C to provide publish/subscribe facilities and message bri
 ## Demo
 First install GCC, then to test:
 ```bash
+git clone --recurse-submodules https://github.com/wzli/mxbridge.git
+cd mxbridge
 make
 ./build/test
 ```
