@@ -72,14 +72,14 @@ int bridge_receive_frame(const void* frame, int len, void* context);
     }
 
 // generate implementation of receive function
-#define GEN_BRIDGE_RECEIVE_IMPL_FIELD(TYPE, MAX_SUBS)              \
-    case TYPE##_ID: {                                              \
-        TYPE msg;                                                  \
-        len -= TYPE##_deserialize(&msg, frame + MESSAGE_ID_SIZE);  \
-        if (len != MESSAGE_ID_SIZE) {                              \
-            return BRIDGE_MESSAGE_LENGTH_MISMATCH;                 \
-        }                                                          \
-        return message_publish(TYPE##_subscribers, &msg, context); \
+#define GEN_BRIDGE_RECEIVE_IMPL_FIELD(TYPE, MAX_SUBS)                        \
+    case TYPE##_ID: {                                                        \
+        TYPE msg;                                                            \
+        len -= TYPE##_deserialize(&msg, (uint8_t*) frame + MESSAGE_ID_SIZE); \
+        if (len != MESSAGE_ID_SIZE) {                                        \
+            return BRIDGE_MESSAGE_LENGTH_MISMATCH;                           \
+        }                                                                    \
+        return message_publish(TYPE##_subscribers, &msg, context);           \
     }
 
 #define GEN_BRIDGE_RECEIVE_IMPL(BRIDGE_MESSAGES)                          \
