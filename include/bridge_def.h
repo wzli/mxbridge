@@ -1,15 +1,15 @@
 #pragma once
 #include "mxbridge.h"
 
-#define STRUCT_MsgA(X) \
-    X(int32_t, a, )    \
+#define TYPEDEF_MsgA(X, _) \
+    X(int32_t, a, )        \
     X(int32_t, b, )
-GEN_STRUCT(MsgA)
+MXGEN(struct, MsgA)
 
-#define STRUCT_MsgB(X) \
-    X(float, x, )      \
+#define TYPEDEF_MsgB(X, _) \
+    X(float, x, )          \
     X(MsgA, y, )
-GEN_STRUCT(MsgB)
+MXGEN(struct, MsgB)
 
 #define BRIDGE_MESSAGES(X) \
     X(MsgA, 10)            \
