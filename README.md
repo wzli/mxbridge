@@ -29,7 +29,7 @@ make
 ./build/test
 ```
 Output:
-```json
+```
 send original message a: {"a":20, "b":40}
 received message a: {"a":20, "b":40} src_ctx 0x1 dst_ctx (nil)
 loopback frame: id 0 len 10 buf 0x7ffd7e1432ee ctx (nil)
